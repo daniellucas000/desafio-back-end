@@ -5,6 +5,7 @@ interface User {
 
 function saveUserToDatabase(user: User) {
   console.log(user);
+  console.log('Branch develop');
 }
 
 saveUserToDatabase({
