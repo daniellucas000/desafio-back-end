@@ -1,0 +1,22 @@
+services:
+  localdb:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/dumps:/app-db-dumps
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=p@ss0word_dev1
+      - POSTGRES_DB=dev_database
+
+  testdb:
+    image: postgres:latest
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./db/dumps:/app-db-dumps
+    environment:
+      - POSTGRES_USER=dev_test
+      - POSTGRES_PASSWORD=p@ss0word_test1
+      - POSTGRES_DB=test_database
