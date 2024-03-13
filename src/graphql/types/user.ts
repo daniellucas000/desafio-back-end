@@ -1,0 +1,18 @@
+export const typeDefs = `
+type User {
+  id: ID!
+  name: String
+  email: String
+  birthDate: String
+  password: String
+}
+
+type Query {
+  user(id: ID!): User
+  users: [User]
+}
+
+type Mutation {
+  createUser(name: String, email: String, birthDate: String, password: String): User
+}
+`;

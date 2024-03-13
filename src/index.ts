@@ -1,25 +1,23 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 
-import { AppDataSource } from './data-source';
-import { User } from './entity/User';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
 
-AppDataSource.initialize()
-  .then(async () => {
-    console.log('Inserting a new user into the database...');
-    const user = new User();
-    user.firstName = 'Timber';
-    user.lastName = 'Saw';
-    user.age = 25;
-    await AppDataSource.manager.save(user);
-    console.log('Saved a new user with id: ' + user.id);
+import { resolvers } from './graphql/resolvers/user';
+import { typeDefs } from './graphql/types/user';
+interface MyContext {
+  token?: string;
+}
 
-    console.log('Loading users from the database...');
-    const users = await AppDataSource.manager.find(User);
-    console.log('Loaded users: ', users);
+const server = new ApolloServer<MyContext>({ typeDefs, resolvers });
 
-    console.log(
-      'Here you can setup and run express / fastify / any other framework.'
-    );
-  })
-  .catch((error) => console.log(error));
+async function startServer() {
+  const { url } = await startStandaloneServer(server, {
+    context: async ({ req }) => ({ token: req.headers.token }),
+    listen: { port: 4000 },
+  });
+  console.log(`🚀 Server ready at ${url}`);
+}
+
+startServer();
