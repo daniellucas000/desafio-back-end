@@ -6,6 +6,13 @@ interface User {
   password: string;
 }
 
+interface CreateUserArgs {
+  name: string;
+  email: string;
+  birthDate: string;
+  password: string;
+}
+
 const users: User[] = [];
 
 export const resolvers = {
@@ -18,7 +25,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    createUser: (_: unknown, args: { name: string; email: string; birthDate: string; password: string }) => {
+    createUser: (_: unknown, args: CreateUserArgs) => {
       const newUser: User = {
         id: users.length + 1,
         name: args.name,

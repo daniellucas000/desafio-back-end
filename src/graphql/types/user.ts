@@ -1,10 +1,9 @@
 export const typeDefs = `
 type User {
   id: ID!
-  name: String
-  email: String
-  birthDate: String
-  password: String
+  name: String!
+  email: String!
+  birthDate: String!
 }
 
 type Query {
@@ -12,7 +11,14 @@ type Query {
   users: [User]
 }
 
+input CreateUserInput {
+  name: String!
+  email: String!
+  birthDate: String
+  password: String!
+ }
+ 
 type Mutation {
-  createUser(name: String, email: String, birthDate: String, password: String): User
+  createUser(input: CreateUserInput): User
 }
 `;
