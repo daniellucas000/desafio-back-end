@@ -8,13 +8,13 @@ type User {
 
 type Query {
   user(id: ID!): User
-  users: [User]
+  users: [User]!
 }
 
 input CreateUserInput {
   name: String!
   email: String!
-  birthDate: String
+  birthDate: String!
   password: String!
  }
  
