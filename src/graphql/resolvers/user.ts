@@ -1,7 +1,7 @@
 import { User } from '../../entity/User';
 import { AppDataSource } from '../../data-source';
 import { z } from 'zod';
-
+import bcrypt from 'bcrypt';
 interface CreateUserArgsProps {
   name: string;
   email: string;
@@ -45,8 +45,12 @@ export const resolvers = {
         throw new Error('The email address already exists.');
       }
 
+      const saltRounds = 10;
+      const hashedPassword = bcrypt.hashSync(args.input.password, saltRounds);
+
       const newUser = new User();
       Object.assign(newUser, validation.data);
+      newUser.password = hashedPassword;
 
       const savedUser = await AppDataSource.manager.save(newUser);
       return savedUser;
