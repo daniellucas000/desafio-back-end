@@ -9,6 +9,10 @@ interface CreateUserArgsProps {
   password: string;
 }
 
+interface UserArgs {
+  id: number;
+}
+
 const userSchema = z.object({
   name: z.string(),
   email: z.string().email(),
@@ -18,18 +22,18 @@ const userSchema = z.object({
   password: z
     .string()
     .min(6)
-    .refine((value) => /\d/.test(value), {
+    .refine((value) => /[a-zA-Z]/.test(value), {
       message: 'Password must contain at least one digit',
     }),
 });
 
 export const resolvers = {
   Query: {
-    user: async (_: unknown, args: { id: number }) => {
-      return await AppDataSource.manager.findOne(User, { where: { id: args.id } });
+    user: (_: unknown, args: UserArgs) => {
+      return AppDataSource.manager.findOne(User, { where: { id: args.id } });
     },
-    users: async () => {
-      return await AppDataSource.manager.find(User);
+    users: () => {
+      return AppDataSource.manager.find(User);
     },
   },
   Mutation: {
@@ -52,8 +56,7 @@ export const resolvers = {
       Object.assign(newUser, validation.data);
       newUser.password = hashedPassword;
 
-      const savedUser = await AppDataSource.manager.save(newUser);
-      return savedUser;
+      return AppDataSource.manager.save(newUser);
     },
   },
 };
