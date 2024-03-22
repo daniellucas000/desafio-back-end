@@ -13,7 +13,7 @@ interface MyContext {
 
 const server = new ApolloServer<MyContext>({ typeDefs, resolvers });
 
-async function startServer() {
+export async function startServer() {
   try {
     await AppDataSource.initialize();
     const { url } = await startStandaloneServer(server, {
@@ -21,8 +21,10 @@ async function startServer() {
       listen: { port: 4000 },
     });
     console.log(`🚀 Server ready at ${url}`);
+    return url;
   } catch (error) {
     console.log('Failed to connect:', error);
+    throw error;
   }
 }
 
